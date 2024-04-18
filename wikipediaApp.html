@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+
+
+<style type="text/css">
+* {
+  box-sizing: border-box;
+}
+
+body {
+	margin: 20px;
+}
+
+input {
+	padding: 15px;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+.result {
+	padding: 10px; 
+	border-radius: 10px;
+	box-shadow: 5px, 10px;
+}
+
+.result:nth-child(odd) {
+	background: lightgrey;
+	
+}
+
+.title {
+	color: deepskyblue;
+}
+
+div p{
+	font-size: 18px;
+}
+
+</style>
+
+
+
+<body>
+
+<center>
+
+<div>
+<img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/1200px-Wikipedia-logo-v2.svg.png" height = "150" width="150">
+</div>
+<input type="search" id="input" placeholder="Type something" size = "100">
+</center>
+
+<div id="results">
+</div>	
+
+</body>
+<script type="text/javascript">
+let inputEle = document.getElementById('input')
+function search(event) {
+if(event.key === "Enter") {
+document.getElementById('results').innerHTML = "";
+
+let resultEle = document.getElementById("results")
+
+let url = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&origin=*&srsearch=" + inputEle.value;
+
+fetch(url)
+.then(res  => 
+	res.json()
+)
+.then(res1  => {
+	let resultArray = res1.query.search 
+	for(i=0; i < resultArray.length; i++){
+		//let headingEle = document.createElement("h1")
+		//headingEle.innerHTML = resultArray[i].title
+		//let paraEle =document.createElement("p")
+		//paraEle.innerHTML = resultArray[i].snippet
+		//resultEle.appendChild(headingEle)
+		//resultEle.appendChild(paraEle)
+		//let anchorEle = document.createElement("a")
+
+		let resultShort = document.createElement("div")
+		resultShort.classList.add("result")
+		resultShort.innerHTML = `
+		<h1 class = "title">${resultArray[i].title}</h1>
+		<a target = "_blank" href = "https://en.wikipedia.org/wiki/${resultArray[i].title}">https://en.wikipedia.org/wiki/${resultArray[i].title}</a>
+		<p>${resultArray[i].snippet}</p>
+
+		` ;
+
+		resultEle.appendChild(resultShort)
+
+
+
+		
+
+
+	}
+
+})
+
+
+
+
+inputEle.value = ""
+// why inputEle.value and why not inputEle.innerHTML ?
+// input element doesn't have closing tag, it's a self-closing tag, hence no html content. That's why inputEle.value and not inputEle.innerHTML
+
+}	
+
+
+}
+
+inputEle.addEventListener("keydown", search);
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+</html>
